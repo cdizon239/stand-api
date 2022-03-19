@@ -20,40 +20,62 @@ class User(UserMixin, Model):
     name=CharField()
     email=CharField()
     img_url=CharField()
+    created_at=DateTimeField(default=datetime.datetime.now)
 
     class Meta:
         database=DATABASE_URL
 
 #### SPACES MODEL ####
 class Space(Model):
-    # owner=ForeignKeyField(User, backref='spaces')
+    owner=ForeignKeyField(User, backref='spaces_owned')
     name=CharField(unique=True)
     privacy=CharField()
     is_active=BooleanField(default=True)
-    # notes=
     created_at=DateTimeField(default=datetime.datetime.now)
-    members= ManyToManyField(User, backref='spaces')
 
     # the Meta class is a special class inside your model
     # that exists to just tell it how to run
     class Meta:
         database=DATABASE_URL
 
-SpaceMembers = Space.members.get_through_model()     
-
-#### MEMBER MODEL ####
-# class Member(Model):
-#     user=ForeignKeyField(User, backref= 'members')
-#     space=ForeignKeyField(Space, backref= 'members')
+#### SPACE MEMBER MODEL ####
+class SpaceMember(Model):
+    user=ForeignKeyField(User, backref= 'space_members')
+    space=ForeignKeyField(Space, backref= 'space_members')
     
-#     class Meta:
-#         database=DATABASE_URL
+    class Meta:
+        database=DATABASE_URL
+
+#### TICKET MODEL ####     
+class Ticket(Model):
+    space=ForeignKeyField(Space, backref='space_tickets')
+    status=CharField()
+    title=CharField()
+    description=TextField()
+    assignee=ForeignKeyField(User, backref='ticket_assignee')
+    created_at=DateTimeField()
+    updated_at=DateTimeField(default=datetime.datetime.now)
+    is_archived=BooleanField()
+
+    class Meta:
+        database=DATABASE_URL
+
+#### COMMENT MODEL ####     
+class Comment(Model):
+    ticket=ForeignKeyField(Ticket, backref='ticket_comments')
+    detail=TextField()
+    created_by=ForeignKeyField(User, backref='ticket_author')
+    created_at=DateTimeField()
+    updated_at=DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+        database=DATABASE_URL        
 
 
 def initialize():
     DATABASE_URL.connect()
     # the safe keyword argument means don't create the table
-    DATABASE_URL.create_tables([User, Space, SpaceMembers], safe=True)
+    DATABASE_URL.create_tables([User, Space, Ticket, Comment, SpaceMember], safe=True)
 
     print('TABLES CREATED')
     DATABASE_URL.close()

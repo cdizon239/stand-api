@@ -1,3 +1,4 @@
+from email import message
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
 from flask_login import login_user, logout_user
@@ -5,10 +6,19 @@ from flask_login import login_user, logout_user
 import models
 user = Blueprint('users', __name__)
 
-@user.get('/')
-def test_users():
-    return 'User blueprint worksss'
+# @user.get('/')
+# def test_users():
+#     return 'User blueprint worksss'
 
+@user.get('/')
+def get_users():
+    users = models.User.select()
+    dict_users = [model_to_dict(user) for user in users]
+    return jsonify(
+        data=dict_users,
+        status=201,
+        message=f'returned {len(dict_users)} users'
+    )
 
 @user.post('/login')
 def login():
