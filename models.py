@@ -39,6 +39,8 @@ class Space(Model):
     class Meta:
         database=DATABASE_URL
 
+SpaceMembers = Space.members.get_through_model()     
+
 #### MEMBER MODEL ####
 # class Member(Model):
 #     user=ForeignKeyField(User, backref= 'members')
@@ -51,7 +53,7 @@ class Space(Model):
 def initialize():
     DATABASE_URL.connect()
     # the safe keyword argument means don't create the table
-    DATABASE_URL.create_tables([User, Space, Space.members.get_through_model()], safe=True)
+    DATABASE_URL.create_tables([User, Space, SpaceMembers], safe=True)
 
     print('TABLES CREATED')
     DATABASE_URL.close()

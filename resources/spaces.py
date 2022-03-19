@@ -13,10 +13,15 @@ space = Blueprint('spaces', __name__)
 def create_space():
     payload = request.get_json()
     #  grab all the members that need to be added to a space
+    payload['members'] = models.User.select().where(models.User.email in payload['members'])
+
+    dict_members = [model_to_dict(member) for member in payload['members']]
+    print(dict_members)
 
     create_space = models.Space.create(
         name=payload['name'],
         privacy=payload['privacy'],
+        members=payload['members']
     )
     created_space = model_to_dict(create_space)
     return jsonify(
