@@ -9,6 +9,7 @@ from resources.users import user
 
 #  auth dependencies
 from flask_login import LoginManager
+
 app = Flask(__name__)
 load_dotenv()
 
@@ -33,6 +34,7 @@ def load_user(user_id):
 #  register blueprints
 app.register_blueprint(space, url_prefix='/api/v1/spaces')
 app.register_blueprint(user, url_prefix='/api/v1/users')
+
 
 
 @app.get('/')
