@@ -1,17 +1,9 @@
-from email import message
-from itertools import count
-import json
-from telnetlib import STATUS
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
 from peewee import *
 import models
 space = Blueprint('spaces', __name__)
 from flask_login import current_user
-
-# @space.get('/')
-# def space_test():
-#     return 'Space blueprint works'
 
 #### CREATE A SPACE (WITH MEMBERS) ####
 @space.post('/')
@@ -118,29 +110,62 @@ def edit_space(space_id):
             message='Invalid Space ID'
         ), 400
 
+#### PATCH: Archive a space ####
+@space.patch('/archive/<space_id>')
+def archive_space(space_id):
+    try:
+        space_to_archive = models.Space.get_by_id(space_id)
+        if space_to_archive.owner.id == current_user.id:
+            payload = request.get_json()
+            space_to_archive.is_active = False
+            space_to_archive.save()
+            
+            updated_channel = models.Space.get_by_id(space_id)
+            updated_channel_dict = model_to_dict(updated_channel)
+
+            return jsonify(
+                data=updated_channel_dict,
+                status=200,
+                message='Space successfully archived'
+            ), 200
+
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            status=400,
+            message='Invalid Space ID'
+        ), 400
+
+
 #### POST: Add members to the space ####
 @space.post('/<space_id>/add_member')
 def add_member(space_id):
     payload = request.get_json()
     try: 
-        #  get new space members from payload
+        #  get space memebrs to add from payload
         space_members_to_add = models.User.select().where(models.User.email << payload['members'])
-        new_space_members_dlist = [model_to_dict(member) for member in space_members_to_add]
+        space_members_to_add_dlist = [model_to_dict(member) for member in space_members_to_add]
 
-        for new_member in new_space_members_dlist:
-            models.SpaceMember.create(
-                space = space_id,
-                user = new_member['id']
-            )
-        members = models.SpaceMember.select()
-        print([model_to_dict(member) for member in members])
+        #  get a list of ids of current members
+        current_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == space_id)
+        current_members_id_dict = [model_to_dict(member)['user']['id'] for member in current_members]
+        
+        #  add membere to space if they are not already in the current member list
+        for new_member in space_members_to_add_dlist:            
+            if new_member['id'] not in current_members_id_dict:
+                models.SpaceMember.create(
+                    space = space_id,
+                    user = new_member['id']
+                )
+        # return current space members
+        members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == space_id)
+        space_members = [model_to_dict(member) for member in members]
         
         return jsonify(
-            data={},
-            message='Successfully added members',
+            data=space_members,
+            message=f'Successfully added members, space has now {len(space_members)} members',
             status=200
-        ), 200
-        
+        ), 200     
 
     except models.DoesNotExist:
         return jsonify(
@@ -149,6 +174,25 @@ def add_member(space_id):
             status=400
         ), 400
 
+#  come back to see if this should be change to payload members
+#### DELETE: Member from a space ####
+@space.delete('/<space_id>/remove_member/<user_id>')
+def remove_member(space_id, user_id):
+    try:
+        #  remove member from SpaceMember
+        member_to_remove = models.SpaceMember.delete().where(models.SpaceMember.space == space_id & models.SpaceMember.user == user_id)
+        member_to_remove.execute()
+        
+        return jsonify(
+            message='Successfully removed member from the space',
+            status=200
+        ), 200
+
+    except models.DoesNotExist:
+        return jsonify(
+            message='Space member succesfully deleted',
+            status=400
+        ), 400
 
 
 #### DELETE A SPACE ###
@@ -169,5 +213,3 @@ def delete_space(space_id):
             status = 400
         ), 400
 
-
-####

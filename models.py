@@ -53,6 +53,7 @@ class Ticket(Model):
     title=CharField()
     description=TextField()
     assignee=ForeignKeyField(User, backref='ticket_assignee')
+    likes=IntegerField()
     created_at=DateTimeField()
     updated_at=DateTimeField(default=datetime.datetime.now)
     is_archived=BooleanField()

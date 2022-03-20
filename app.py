@@ -6,6 +6,8 @@ import models
 #  import controllers
 from resources.spaces import space
 from resources.users import user
+from resources.tickets import ticket
+from resources.comments import comment
 
 #  auth dependencies
 from flask_login import LoginManager
@@ -34,6 +36,8 @@ def load_user(user_id):
 #  register blueprints
 app.register_blueprint(space, url_prefix='/api/v1/spaces')
 app.register_blueprint(user, url_prefix='/api/v1/users')
+app.register_blueprint(ticket, url_prefix='/api/v1/tickets')
+app.register_blueprint(comment, url_prefix='/api/v1/comments')
 
 
 
