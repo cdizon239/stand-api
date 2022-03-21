@@ -56,7 +56,7 @@ def show_ticket(ticket_id):
         ), 400
 
 #  tickets should be able to be updated by anyone in the space
-@ticket.put('/<ticket_id>/edit')
+@ticket.patch('/<ticket_id>/edit')
 def edit_ticket(ticket_id):
     try:
         print('yay')
@@ -65,6 +65,7 @@ def edit_ticket(ticket_id):
         space_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == ticket_to_edit.space)
         space_members_id_dict = [model_to_dict(member)['user']['id'] for member in space_members]
         print(space_members_id_dict)
+        print(current_user.id)
 
         if current_user.id in space_members_id_dict:
             print('yay')
@@ -96,9 +97,33 @@ def edit_ticket(ticket_id):
         ), 400
 
 ### delete ticket
-# @ticket.delete('/<ticket_id>/delete')
-# def delete_ticket():
+@ticket.delete('/<ticket_id>/delete')
+def delete_ticket(ticket_id):
+    ticket_to_delete = models.Ticket.get_by_id(ticket_id)
 
+    try:
+        space_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == ticket_to_delete.space)
+        space_members_id_dict = [model_to_dict(member)['user']['id'] for member in space_members]
+        print(space_members_id_dict)
 
+        if current_user.id in space_members_id_dict:
+            ticket_to_delete.delete_instance()
+            
+            return jsonify(
+                message='Ticket deleted successfully',
+                status=200
+            ), 200
+        
+        else: 
+            return jsonify(
+                message='You don\'t have permission to delete the ticket',
+                status=403
+            ), 403
 
-#### patch ticket
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='invalid Ticket ID',
+            status=400
+        ), 400
+        
