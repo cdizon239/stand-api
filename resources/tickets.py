@@ -6,10 +6,10 @@ import models
 ticket = Blueprint('tickets', __name__)
 from flask_login import current_user
 
-# GET: index for all tickets
-@ticket.get('/')
-def ticket_index():
-    all_tickets = models.Ticket.select()
+# GET: index for all tickets for a space
+@ticket.get('/<space_id>/all_tickets')
+def ticket_index(space_id):
+    all_tickets = models.Ticket.select().where(models.Ticket.space == space_id)
     all_tickets_dict = [model_to_dict(ticket) for ticket in all_tickets]
     
     return jsonify(

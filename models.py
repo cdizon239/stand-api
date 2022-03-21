@@ -66,6 +66,7 @@ class Ticket(Model):
 class Comment(Model):
     ticket=ForeignKeyField(Ticket, backref='ticket_comments')
     detail=TextField()
+    likes=IntegerField(default=0)
     created_by=ForeignKeyField(User, backref='ticket_author')
     created_at=DateTimeField()
     updated_at=DateTimeField(default=datetime.datetime.now)
