@@ -51,12 +51,13 @@ class Ticket(Model):
     space=ForeignKeyField(Space, backref='space_tickets')
     status=CharField()
     title=CharField()
-    description=TextField()
-    assignee=ForeignKeyField(User, backref='ticket_assignee')
-    likes=IntegerField()
-    created_at=DateTimeField()
+    description=TextField(null=True)
+    assignee=ForeignKeyField(User, backref='ticket_assignee', null=True)
+    likes=IntegerField(default=0)
+    created_by=ForeignKeyField(User, backref='ticket_reporter')
+    created_at=DateTimeField(default=datetime.datetime.now)
     updated_at=DateTimeField(default=datetime.datetime.now)
-    is_archived=BooleanField()
+    is_archived=BooleanField(default=False)
 
     class Meta:
         database=DATABASE_URL

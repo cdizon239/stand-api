@@ -10,9 +10,12 @@ from flask_login import current_user
 def create_space():
     payload = request.get_json()
     payload['owner'] = current_user.id
-
-    #  grab all the members that need to be added to a space
-    space_members = models.User.select().where(models.User.email << payload['members'])
+    current_user_email = model_to_dict(models.User.get_by_id(current_user.id))['email']
+    
+    if 'members' in payload and len(payload['members']) > 0:
+        payload['members'].append(current_user_email)
+    else:
+        payload['members'] = [current_user_email]
 
     #  create a space
     create_space = models.Space.create(
@@ -21,6 +24,9 @@ def create_space():
         privacy=payload['privacy'],
     )
     created_space = model_to_dict(create_space)
+
+    #  grab all the members that need to be added to a space
+    space_members = models.User.select().where(models.User.email << payload['members'])
     space_members_dict = [model_to_dict(space_member) for space_member in space_members]
     
     # populate spacemember table for each member in space  
@@ -29,7 +35,7 @@ def create_space():
             user=user['id'],
             space=created_space['id']
         )
-    
+
     members = models.SpaceMember.select()
     print([model_to_dict(member) for member in members])
 
@@ -180,7 +186,7 @@ def add_member(space_id):
 def remove_member(space_id, user_id):
     try:
         #  remove member from SpaceMember
-        member_to_remove = models.SpaceMember.delete().where(models.SpaceMember.space == space_id & models.SpaceMember.user == user_id)
+        member_to_remove = models.SpaceMember.delete().where((models.SpaceMember.space == space_id) & (models.SpaceMember.user == user_id))
         member_to_remove.execute()
         
         return jsonify(
