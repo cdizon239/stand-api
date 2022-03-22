@@ -1,4 +1,5 @@
 from email import message
+from os import stat
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
 from peewee import *
@@ -24,15 +25,25 @@ def create_ticket(space_id):
     payload = request.get_json()
     payload['created_by'] = current_user.id
     payload['space'] = space_id
-    
-    created_ticket = models.Ticket.create(**payload)
-    created_ticket_dict = model_to_dict(created_ticket)
 
-    return jsonify(
-        data = created_ticket_dict,
-        message = 'Successfully created a ticket',
-        status = 201
-    ), 201
+    space_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == space_id)
+    space_members_id_dict = [model_to_dict(member)['user']['id'] for member in space_members]
+
+    if current_user.id in space_members_id_dict:
+        created_ticket = models.Ticket.create(**payload)
+        created_ticket_dict = model_to_dict(created_ticket)
+
+        return jsonify(
+            data = created_ticket_dict,
+            message = 'Successfully created a ticket',
+            status = 201
+        ), 201
+    else:
+        return jsonify(
+            data={},
+            message='You don\'t have permissions to create a ticket',
+            status=403
+        ), 403
     
 # GET: one ticket
 @ticket.get('/<ticket_id>')

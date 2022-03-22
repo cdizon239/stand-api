@@ -87,7 +87,7 @@ def show_space(space_id):
 @space.put('/<space_id>')
 def edit_space(space_id):
     try:
-        space_to_update = models.Space.get_by_id(id)
+        space_to_update = models.Space.get_by_id(space_id)
         if space_to_update.owner.id ==  current_user.id:
             payload = request.get_json()
             query = models.Space.update(**payload).where(models.Space.id == space_id)
