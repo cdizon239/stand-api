@@ -79,10 +79,10 @@ def edit_comment(comment_id):
             query = models.Comment.update(**payload).where(models.Comment.id == comment_id)
             query.execute()
 
-            updated_comment = models.Ticket.get_by_id(comment_id)
+            updated_comment = models.Comment.get_by_id(comment_id)
             updated_comment_dict = model_to_dict(updated_comment)
             return jsonify(
-                data=updated_comment,
+                data=updated_comment_dict,
                 status=200,
                 message='Successfully updated the ticket'
             )

@@ -111,7 +111,6 @@ def edit_ticket(ticket_id):
 @ticket.delete('/<ticket_id>/delete')
 def delete_ticket(ticket_id):
     ticket_to_delete = models.Ticket.get_by_id(ticket_id)
-
     try:
         space_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == ticket_to_delete.space)
         space_members_id_dict = [model_to_dict(member)['user']['id'] for member in space_members]

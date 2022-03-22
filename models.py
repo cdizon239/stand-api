@@ -68,7 +68,7 @@ class Comment(Model):
     detail=TextField()
     likes=IntegerField(default=0)
     created_by=ForeignKeyField(User, backref='ticket_author')
-    created_at=DateTimeField()
+    created_at=DateTimeField(default=datetime.datetime.now)
     updated_at=DateTimeField(default=datetime.datetime.now)
 
     class Meta:
