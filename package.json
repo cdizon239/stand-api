@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/cdizon239/stand-api/issues"
   },
-  "homepage": "https://github.com/cdizon239/stand-api#readme"
+  "homepage": "https://github.com/cdizon239/stand-api#readme",
+  "dependencies": {
+    "google-auth-library": "^7.14.0"
+  }
 }

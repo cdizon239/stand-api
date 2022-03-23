@@ -1,5 +1,7 @@
-from flask import Flask, jsonify
+from urllib import response
+from flask import Flask, jsonify, g
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 import models
 
@@ -12,8 +14,15 @@ from resources.comments import comment
 #  auth dependencies
 from flask_login import LoginManager
 
+#  twilio dependencies
+import uuid  # for generating random user id values
+import twilio.jwt.access_token
+import twilio.jwt.access_token.grants
+import twilio.rest
+
 app = Flask(__name__)
 load_dotenv()
+CORS(app, supports_credentials=True)
 
 SESSION_SECRET = os.getenv('SESSION_SECRET')
 DEBUG = True
@@ -33,13 +42,30 @@ def load_user(user_id):
     except models.DoesNotExist:
         return None
 
-#  register blueprints
+#  REGISTER BLUEPRINTS
 app.register_blueprint(space, url_prefix='/api/v1/spaces')
 app.register_blueprint(user, url_prefix='/api/v1/users')
 app.register_blueprint(ticket, url_prefix='/api/v1/tickets')
 app.register_blueprint(comment, url_prefix='/api/v1/comments')
 
+#  CORS CONFIG
+CORS(space, supports_credentials=True)
+CORS(user, supports_credentials=True)
+CORS(ticket, supports_credentials=True)
+CORS(comment, supports_credentials=True)
 
+
+@app.before_request
+def before_request():
+    '''Connect to the database before each request'''
+    g.db = models.DATABASE_URL
+    g.db.connect()
+
+@app.after_request
+def after_request(response):
+    '''Close db connection after each request'''
+    g.db.close()
+    return response
 
 @app.get('/')
 def test_route():
@@ -51,3 +77,6 @@ if __name__ == '__main__':
         port=PORT,
         debug=DEBUG
     )
+
+#  Twilio sources https://www.twilio.com/docs/video/tutorials/get-started-with-twilio-video-python-flask-server
+# https://www.lohani.dev/blog/integrate-twilio-video-into-a-react-application
