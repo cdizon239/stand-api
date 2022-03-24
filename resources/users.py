@@ -32,8 +32,6 @@ def verify(token):
         #invalid token
         pass
 
-
-
 @user.get('/')
 def get_users():
     users = models.User.select()
@@ -73,6 +71,25 @@ def login():
             message = 'User logged in',
             status = 200
         ), 200
+
+@user.get('/me')
+def get_user():
+    try:
+        current_user = models.User.get_by_id(current_user.id)
+        current_user_dict = model_to_dict(current_user)
+
+        return jsonify(
+            data=current_user_dict,
+            message='My info',
+            status=200
+        ), 200
+
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='Could not fetch info for that user',
+            status=400
+        ), 400
 
 @user.post('/register')
 def register():

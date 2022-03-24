@@ -10,15 +10,10 @@ from resources.spaces import space
 from resources.users import user
 from resources.tickets import ticket
 from resources.comments import comment
+from resources.video import video
 
 #  auth dependencies
 from flask_login import LoginManager
-
-#  twilio dependencies
-import uuid  # for generating random user id values
-import twilio.jwt.access_token
-import twilio.jwt.access_token.grants
-import twilio.rest
 
 app = Flask(__name__)
 load_dotenv()
@@ -47,12 +42,14 @@ app.register_blueprint(space, url_prefix='/api/v1/spaces')
 app.register_blueprint(user, url_prefix='/api/v1/users')
 app.register_blueprint(ticket, url_prefix='/api/v1/tickets')
 app.register_blueprint(comment, url_prefix='/api/v1/comments')
+app.register_blueprint(video, url_prefix='/api/v1/video')
 
 #  CORS CONFIG
-CORS(space, supports_credentials=True)
-CORS(user, supports_credentials=True)
-CORS(ticket, supports_credentials=True)
-CORS(comment, supports_credentials=True)
+# CORS(space, supports_credentials=True)
+# CORS(user, supports_credentials=True)
+# CORS(ticket, supports_credentials=True)
+# CORS(comment, supports_credentials=True)
+# CORS(video, supports_credentials=True)
 
 
 @app.before_request
