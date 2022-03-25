@@ -24,7 +24,7 @@ def find_or_create_room(room_name):
         twilio_client.video.rooms(room_name).fetch()
     except twilio.base.exceptions.TwilioRestException:
         # the room did not exist, so create it
-        twilio_client.video.rooms.create(unique_name=room_name, type="go")
+        twilio_client.video.rooms.create(unique_name=room_name)
 
 def get_access_token(room_name):
     # create the access token
