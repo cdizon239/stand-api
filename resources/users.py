@@ -19,6 +19,7 @@ def verify(token):
     try:
         # Specify the CLIENT_ID of the app that accesses the backend:
         google_user = id_token.verify_oauth2_token(token, requests.Request(), GCLIENT_ID)
+        print(google_user)
         
         user_info = {
             "name": google_user['name'],
@@ -34,23 +35,35 @@ def verify(token):
 
 @user.get('/')
 def get_users():
-    users = models.User.select()
-    dict_users = [model_to_dict(user) for user in users]
-    return jsonify(
-        data=dict_users,
-        status=201,
-        message=f'returned {len(dict_users)} users'
-    )
+    try:
+        users = models.User.select()
+        dict_users = [model_to_dict(user) for user in users]
+        return jsonify(
+            data=dict_users,
+            status=201,
+            message=f'returned {len(dict_users)} users'
+        )
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='model does not exist',
+            status=400
+        ), 400
+
 
 @user.post('/login')
 def login():
     payload = request.get_json() 
     #  verify google token
+    print(payload)
     google_user = verify(payload['id_token'])
-    print(google_user)
-    
+    print(google_user)  
+
+    # return google_user
+
     try:
         user_to_login = models.User.get(models.User.email == google_user['email'])
+
         user_dict = model_to_dict(user_to_login)
 
         login_user(user_to_login)

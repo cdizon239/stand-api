@@ -1,3 +1,4 @@
+from email import message
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
 from peewee import *
@@ -12,10 +13,10 @@ def create_space():
     payload['owner'] = current_user.id
     current_user_email = model_to_dict(models.User.get_by_id(current_user.id))['email']
     
-    if 'members' in payload and len(payload['members']) > 0:
-        payload['members'].append(current_user_email)
-    else:
-        payload['members'] = [current_user_email]
+    # if 'members' in payload and len(payload['members']) > 0:
+    #     payload['members'].append(current_user_email)
+    # else:
+    #     payload['members'] = [current_user_email]
 
     #  create a space
     create_space = models.Space.create(
@@ -48,16 +49,23 @@ def create_space():
 #### INDEX: GET ALL SPACES ####
 @space.get('/')
 def spaces_index():
-    all_spaces = models.Space.select()
-    spaces_dict = [model_to_dict(space) for space in all_spaces]
+    try:
+        all_spaces = models.Space.select()
+        spaces_dict = [model_to_dict(space) for space in all_spaces]
 
-    # count_members = models.Space.select(models.Space, fn.Count(models.User).alias('member_count')).join(models.SpaceMember).join(models.User).group_by(models.Space)
-
-    return jsonify(
-        data = spaces_dict,
-        message = f'Fetched {len(spaces_dict)} spaces',
-        status = 201
-    ), 201
+        # count_members = models.Space.select(models.Space, fn.Count(models.User).alias('member_count')).join(models.SpaceMember).join(models.User).group_by(models.Space)
+        return jsonify(
+            data = spaces_dict,
+            message = f'Fetched {len(spaces_dict)} spaces',
+            status = 201
+        ), 201
+    
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='model does not exist',
+            status=400
+        ), 400
 
 #### Get a space ###
 @space.get('/<space_id>')

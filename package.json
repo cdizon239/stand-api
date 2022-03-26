@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/cdizon239/stand-api#readme",
   "dependencies": {
+    "@atlaskit/avatar-group": "^8.5.11",
     "google-auth-library": "^7.14.0"
   }
 }
