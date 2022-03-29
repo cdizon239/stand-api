@@ -68,6 +68,11 @@ def after_request(response):
 def test_route():
     return f'app is workinggggg on {PORT}'
 
+# create tables in production. If on herok in os.environ
+if 'ON_HEROKU' in os.environ:
+    print('\n on heroku')
+    models.initialize
+
 if __name__ == '__main__':
     models.initialize()
     app.run(

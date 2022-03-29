@@ -9,6 +9,10 @@ import datetime
 # auth dependencies
 from flask_login import UserMixin
 
+# ------- FOR DEPLOYMENT --------
+
+
+
 load_dotenv()
 
 # points to the database
