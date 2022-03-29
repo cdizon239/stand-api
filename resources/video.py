@@ -1,4 +1,5 @@
 #  resource: https://www.twilio.com/docs/video/tutorials/get-started-with-twilio-video-python-flask-server
+from cmath import log
 import os
 #  twilio dependencies
 import uuid  # for generating random user id values
@@ -49,4 +50,12 @@ def join_room():
     # return the decoded access token in the response
     # NOTE: if you are using version 6 of the Python Twilio Helper Library,
     # you should call `access_token.to_jwt().decode()`
-    return {"token": access_token.to_jwt()}
+    print({
+        "token": access_token.to_jwt(),
+        "username": payload['identity']
+    })
+    
+    return {
+        "token": access_token.to_jwt(),
+        "username": payload['identity']
+        }

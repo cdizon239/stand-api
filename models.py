@@ -40,8 +40,8 @@ class Space(Model):
 
 #### SPACE MEMBER MODEL ####
 class SpaceMember(Model):
-    user=ForeignKeyField(User, backref= 'space_members')
-    space=ForeignKeyField(Space, backref= 'space_members')
+    user=ForeignKeyField(User, backref= 'spacemembers')
+    space=ForeignKeyField(Space, backref= 'spacemembers')
     
     class Meta:
         database=DATABASE_URL

@@ -1,4 +1,6 @@
+from cmath import log
 from email import message
+from reprlib import recursive_repr
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
 from peewee import *
@@ -10,41 +12,51 @@ from flask_login import current_user
 @space.post('/')
 def create_space():
     payload = request.get_json()
+    print(current_user)
     payload['owner'] = current_user.id
     current_user_email = model_to_dict(models.User.get_by_id(current_user.id))['email']
     
-    # if 'members' in payload and len(payload['members']) > 0:
-    #     payload['members'].append(current_user_email)
-    # else:
-    #     payload['members'] = [current_user_email]
+    if 'members' in payload and len(payload['members']) > 0:
+        payload['members'].append(current_user_email)
+    else:
+        payload['members'] = [current_user_email]
+    print(payload['members'])
 
-    #  create a space
-    create_space = models.Space.create(
-        owner=payload['owner'],
-        name=payload['name'],
-        privacy=payload['privacy'],
-    )
-    created_space = model_to_dict(create_space)
-
-    #  grab all the members that need to be added to a space
-    space_members = models.User.select().where(models.User.email << payload['members'])
-    space_members_dict = [model_to_dict(space_member) for space_member in space_members]
-    
-    # populate spacemember table for each member in space  
-    for user in space_members_dict:
-        models.SpaceMember.create(
-            user=user['id'],
-            space=created_space['id']
+    try:
+        #  create a space
+        create_space = models.Space.create(
+            owner=payload['owner'],
+            name=payload['name'],
+            privacy=payload['privacy']
         )
+        created_space = model_to_dict(create_space)
 
-    members = models.SpaceMember.select()
-    print([model_to_dict(member) for member in members])
+        #  grab all the members that need to be added to a space
+        space_members = models.User.select().where(models.User.email << payload['members'])
+        space_members_dict = [model_to_dict(space_member) for space_member in space_members]
+        print(space_members_dict)
+        
+        # populate spacemember table for each member in space  
+        for user in space_members_dict:
+            print(user)
+            models.SpaceMember.create(
+                user=user['id'],
+                space=created_space['id']
+            )
 
-    return jsonify(
-        data=created_space,
-        message='Space created!',
-        status=201
-    ), 201
+        return jsonify(
+            data=created_space,
+            message='Space created!',
+            status=201
+        ), 201
+    
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='model does not exist, no Space',
+            status=400
+        ), 400
+
 
 #### INDEX: GET ALL SPACES ####
 @space.get('/')
@@ -151,6 +163,7 @@ def archive_space(space_id):
         ), 400
 
 
+
 #### POST: Add members to the space ####
 @space.post('/<space_id>/add_member')
 def add_member(space_id):
@@ -212,18 +225,26 @@ def remove_member(space_id, user_id):
 #### DELETE A SPACE ###
 @space.delete('/<space_id>')
 def delete_space(space_id):
+    space_to_delete = models.Space.get_by_id(space_id)
     try:
-        space_to_delete = models.Space.get_by_id(space_id)
+        # space_to_delete = models.Space.get_by_id(space_id)
         if space_to_delete.owner.id == current_user.id:
             space_to_delete.delete_instance()
+            delete_space_members = models.SpaceMember.delete().where(models.SpaceMember.space == space_id)
+            delete_space_members.execute()
             return jsonify(
                 message = 'Succefully deleleted the space',
                 status = 200
             )
+        else:
+            return jsonify (
+            data = {},
+            message = 'Not authorized to delete',
+            status = 403
+        ), 403
     except models.DoesNotExist:
         return jsonify (
             data = {},
             message = 'Invalid Space ID',
             status = 400
         ), 400
-
