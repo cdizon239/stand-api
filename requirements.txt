@@ -1,6 +1,5 @@
 click==8.0.4
 Flask==2.0.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 peewee==3.14.10
@@ -18,7 +17,6 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 isort==5.10.1
-itsdangerous==2.1.0
 Jinja2==3.0.3
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.0
@@ -48,7 +46,6 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 isort==5.10.1
-itsdangerous==2.1.0
 Jinja2==3.0.3
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.0
@@ -78,7 +75,6 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 isort==5.10.1
-itsdangerous==2.1.0
 Jinja2==3.0.3
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.0
@@ -108,7 +104,6 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 isort==5.10.1
-itsdangerous==2.1.0
 Jinja2==3.0.3
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.0
@@ -129,7 +124,6 @@ wrapt==1.13.3
 click==8.0.4
 Flask==2.0.3
 Flask-Login==0.5.0
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 peewee==3.14.10
@@ -147,7 +141,6 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 isort==5.10.1
-itsdangerous==2.1.0
 Jinja2==3.0.3
 lazy-object-proxy==1.7.1
 MarkupSafe==2.1.0
@@ -169,7 +162,6 @@ wrapt==1.13.3
 click==8.0.4
 Flask==2.0.3
 Flask-Login==0.5.0
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -180,19 +172,6 @@ click==8.0.4
 Flask==2.0.3
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
-itsdangerous==2.1.1
-Jinja2==3.0.3
-MarkupSafe==2.1.1
-oauthlib==3.2.0
-peewee==3.14.10
-python-dotenv==0.19.2
-six==1.16.0
-Werkzeug==2.0.3
-click==8.0.4
-Flask==2.0.3
-Flask-Cors==3.0.10
-Flask-Login==0.5.0
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -204,7 +183,17 @@ click==8.0.4
 Flask==2.0.3
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
-itsdangerous==2.1.1
+Jinja2==3.0.3
+MarkupSafe==2.1.1
+oauthlib==3.2.0
+peewee==3.14.10
+python-dotenv==0.19.2
+six==1.16.0
+Werkzeug==2.0.3
+click==8.0.4
+Flask==2.0.3
+Flask-Cors==3.0.10
+Flask-Login==0.5.0
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -219,7 +208,6 @@ Flask==2.0.3
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -239,7 +227,6 @@ Flask==2.0.3
 Flask-Cors==3.0.10
 Flask-Login==0.5.0
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -266,7 +253,6 @@ Flask-Cors==3.0.10
 Flask-Login==0.5.0
 google-auth==2.6.2
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -335,7 +321,6 @@ google-auth-httplib2==0.1.0
 googleapis-common-protos==1.56.0
 httplib2==0.20.4
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -372,7 +357,6 @@ google-auth-httplib2==0.1.0
 googleapis-common-protos==1.56.0
 httplib2==0.20.4
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
@@ -410,7 +394,6 @@ googleapis-common-protos==1.56.0
 gunicorn==20.1.0
 httplib2==0.20.4
 idna==3.3
-itsdangerous==2.1.1
 Jinja2==3.0.3
 MarkupSafe==2.1.1
 oauthlib==3.2.0
