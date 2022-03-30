@@ -205,7 +205,6 @@ peewee==3.14.10
 PyJWT==2.3.0
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 six==1.16.0
 twilio==7.7.1
 urllib3==1.26.9
@@ -224,12 +223,10 @@ peewee==3.14.10
 PyJWT==2.3.0
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 six==1.16.0
 twilio==7.7.1
 urllib3==1.26.9
 Werkzeug==2.0.3
-requests==2.21.0
 Flask==1.0.2
 oauthlib==3.0.1
 pyOpenSSL==19.0.0
@@ -252,7 +249,6 @@ pyasn1-modules==0.2.8
 PyJWT==2.3.0
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 rsa==4.8
 six==1.16.0
 twilio==7.7.1
@@ -287,7 +283,6 @@ PyJWT==2.3.0
 pyparsing==3.0.7
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 rsa==4.8
 six==1.16.0
 twilio==7.7.1
@@ -323,7 +318,6 @@ PyJWT==2.3.0
 pyparsing==3.0.7
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 rsa==4.8
 six==1.16.0
 twilio==7.7.1
@@ -396,7 +390,6 @@ PyJWT==2.3.0
 pyparsing==3.0.7
 python-dotenv==0.19.2
 pytz==2022.1
-requests==2.27.1
 rsa==4.8
 six==1.16.0
 twilio==7.7.1
