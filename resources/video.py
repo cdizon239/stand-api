@@ -6,7 +6,7 @@ import uuid  # for generating random user id values
 import twilio.jwt.access_token
 import twilio.jwt.access_token.grants
 import twilio.rest
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 
 video = Blueprint('video', __name__)
 
@@ -59,3 +59,16 @@ def join_room():
         "token": access_token.to_jwt(),
         "username": payload['identity']
         }
+
+@video.get('/get_active_rooms')        
+def get_all_rooms():
+    rooms = twilio_client.video.rooms.list(status='in-progress')
+    
+    active_room_names= [room.unique_name for room in rooms]
+
+    return jsonify(
+            data=active_room_names,
+            message=f'Fetched {len(active_room_names)} active rooms',
+            status=200
+        ), 200
+
