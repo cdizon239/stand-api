@@ -164,8 +164,32 @@ def archive_space(space_id):
 
 
 
+@space.get('/<space_id>/space_members')
+def get_all_space_members(space_id):
+    current_members = models.SpaceMember.select(models.SpaceMember.user).where(models.SpaceMember.space == space_id)
+
+    try:
+        current_members_dict = [model_to_dict(member)['user']for member in current_members]
+        
+        return jsonify(
+            data=current_members_dict,
+            message=f'fetched {len(current_members_dict)} members in the space',
+            status=200
+        ), 200  
+        
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            status=400,
+            message='Invalid Space ID'
+        ), 400
+
+
+
+
+
 #### POST: Add members to the space ####
-@space.post('/<space_id>/add_member')
+@space.post('/<space_id>/add_members')
 def add_member(space_id):
     payload = request.get_json()
     try: 

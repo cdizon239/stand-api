@@ -33,7 +33,7 @@ class User(UserMixin, Model):
 class Space(Model):
     owner=ForeignKeyField(User, backref='spaces_owned')
     name=CharField(unique=True)
-    privacy=CharField()
+    privacy=CharField(default='private')
     is_active=BooleanField(default=True)
     created_at=DateTimeField(default=datetime.datetime.now)
 
