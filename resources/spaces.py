@@ -25,9 +25,7 @@ def create_space():
     try:
         #  create a space
         create_space = models.Space.create(
-            owner=payload['owner'],
-            name=payload['name'],
-            privacy=payload['privacy']
+            **payload
         )
         created_space = model_to_dict(create_space)
 
