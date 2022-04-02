@@ -71,7 +71,7 @@ def test_route():
 # create tables in production. If on herok in os.environ
 if 'ON_HEROKU' in os.environ:
     print('\n on heroku')
-    models.initialize
+    models.initialize()
 
 if __name__ == '__main__':
     models.initialize()
