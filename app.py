@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 import os
 import models
+from playhouse.shortcuts import model_to_dict
+
+
 
 #  import controllers
 from resources.spaces import space
@@ -33,6 +36,7 @@ def load_user(user_id):
     # and it expects us to return a user if it exists
     # and None if it does not exist
     try:
+        print(model_to_dict(models.User.get_by_id(user_id)))
         return models.User.get_by_id(user_id)
     except models.DoesNotExist:
         print('uh oh')
