@@ -60,6 +60,7 @@ def create_space():
 @space.get('/')
 def spaces_index():
     try:
+        print(current_user.is_authenticated)
         all_spaces = models.Space.select()
         spaces_dict = [model_to_dict(space) for space in all_spaces]
 

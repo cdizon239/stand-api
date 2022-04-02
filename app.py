@@ -35,6 +35,7 @@ def load_user(user_id):
     try:
         return models.User.get_by_id(user_id)
     except models.DoesNotExist:
+        print('uh oh')
         return None
 
 #  REGISTER BLUEPRINTS
