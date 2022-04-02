@@ -11,12 +11,10 @@ from flask_login import UserMixin
 
 # ------- FOR DEPLOYMENT --------
 
-
-
 load_dotenv()
 
 # points to the database
-DATABASE_URL= connect(os.getenv('DATABASE_URL'))
+DATABASE_URL= connect(os.environ.get('DATABASE_URL'))
 
 #### USER MODEL ####
 class User(UserMixin, Model):
